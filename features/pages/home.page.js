@@ -21,8 +21,8 @@ export class HomePage {
         this.dateSelector = (date) => By.css(`[data-id="${date}"]`)
         this.doneButton = By.css('aria-label="Done"') 
         this.adultsSelector = (adultsNumber) => By.css(`[data-ref="input-button__display-value"]:contains('${adultsNumber} Adult')`)
-        data-ref="input-button__display-value"
-        }
+        this.searchButton = By.css('aria-label="Search"')
+ }
 
     async open() {
         await this.driver.get(this.url);
@@ -69,5 +69,6 @@ export class HomePage {
             100000,
         )
         await this.driver.findElement(this.adultsSelector(adultsNumber)).click();
+        await this.driver.findElement(this.searchButton).click();
 } 
 }
