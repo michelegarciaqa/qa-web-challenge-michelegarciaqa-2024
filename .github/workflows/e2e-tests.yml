@@ -1,0 +1,48 @@
+name: E2E CI
+
+on:
+    push:
+        branches: ['main']
+    pull_request:
+        branches: ['main']
+    workflow_dispatch:
+
+jobs:
+    e2e-tests:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout GitHub repo
+              uses: actions/checkout@v3
+
+            - name: Install Chrome for set binary test
+              uses: browser-actions/setup-chrome@v1
+              with:
+                  chrome-version: stable
+              id: setup-chrome
+
+            - name: Set ENV Linux
+              run: |
+                  echo "CHROME_BIN=${{ steps.setup-chrome.outputs.chrome-path }}" >> "$GITHUB_ENV"
+
+            - name: Install Requirements
+              run: npm install
+
+            - name: Run tests
+              uses: nick-invision/retry@v2.8.3
+              with:
+                  timeout_minutes: 20
+                  max_attempts: 2
+                  command: npm test
+
+            - name: Generate report
+              uses: actions/upload-artifact@v4
+              with:
+                  name: Myreport.html
+                  path: '**/cucumber-report.html'
+
+            - name: Deploy report to Github Pages
+              uses: peaceiris/actions-gh-pages@v2
+              env:
+                  PERSONAL_TOKEN: ${{ secrets.TOKEN_ACTIONS }}
+                  PUBLISH_BRANCH: gh-pages
+                  PUBLISH_DIR: ./reports
