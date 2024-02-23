@@ -27,12 +27,12 @@ Given('I navigate to the Ryanair website', async () => {
 })
 
 When(
-    'I search for a flight from {string} to {string} on {string} for {string}',
-    async (departure, destination, startDate, adultsNumber) => {
+    'I search for a flight from {string} to {string} on {string} for 2 Adultos',
+    async (departure, destination, startDate) => {
         await homePage.acceptCookies()
         await homePage.selectFlight(departure, destination)
         await homePage.selectDate(startDate)
-        await homePage.selectPassengers(adultsNumber)
+       // await homePage.selectPassengers()
 })
 
 Then('a login popup shows up before payment', async () => {

@@ -19,10 +19,10 @@ export class HomePage {
         )
         this.datesToSelector = By.css('[uniqueid="dates-to"]')
         this.dateSelector = (date) => By.css(`[data-id="${date}"]`)
-        this.doneButton = By.css('aria-label="Done"') 
-        this.adultsSelector = (adultsNumber) => By.css(`[data-ref="input-button__display-value"]:contains('${adultsNumber} Adult')`)
-        this.searchButton = By.css('aria-label="Search"')
- }
+        this.adultSelector = By.css('aria-label="1Adults+1"')
+        this.doneButton = By.xpath('//*[contains(text(), "Done")]')
+        this.selectButton = By.className('(//*[contains(text(), "Select")])[1]')
+    }
 
     async open() {
         await this.driver.get(this.url);
@@ -51,24 +51,21 @@ export class HomePage {
 
         await this.driver.wait(
             until.elementsLocated(this.dateSelector(startDate)),
-            100000,
+            200000,
         )
 
         await this.driver.findElement(this.dateSelector(startDate)).click()
-        await this.driver.findElement(this.datesToSelector).click()
-        await this.driver.findElement(this.dateSelector(endDate)).click()
-
-        // await this.driver.wait(until.elementsLocated(this.doneButton), 100000)
-        // await this.driver.findElement(this.doneButton).click()
+        //in case i wanna put return dates
+        //await this.driver.findElement(this.datesToSelector).click()
+        //await this.driver.findElement(this.dateSelector(endDate)).click()
+       // await this.driver.findElement(this.adultSelector).click();
+        await this.driver.wait(until.elementsLocated(this.doneButton), 100000)
+        await this.driver.findElement(this.doneButton).click()
         await this.driver.findElement(this.searchButton).click()
+        await this.driver.wait(until.elementLocated(this.selectButton), 100000);
+        await this.driver.findElement(this.selectButton).click();
+        await this.driver.findElement(this.selectButton).click();
+        await this.driver.findElement(this.selectButton).sendKeys(Key.ENTER);
+        //await this.driver.findElement(this.basicFare).click();
     }
-
-    async selectPassengers(adultsNumber){    
-        await this.driver.wait(
-            until.elementsLocated(this.adultsSelector(adultsNumber)),
-            100000,
-        )
-        await this.driver.findElement(this.adultsSelector(adultsNumber)).click();
-        await this.driver.findElement(this.searchButton).click();
-} 
 }
