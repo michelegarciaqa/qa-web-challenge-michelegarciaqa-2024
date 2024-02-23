@@ -13,7 +13,7 @@ BeforeAll(async () => {
         .setChromeOptions(options)
         .build()
 
-    await driver.manage().setTimeouts({ implicit: 200000 })
+    await driver.manage().setTimeouts({ implicit: 100000,})
 })
 
 AfterAll(async () => {
@@ -27,12 +27,12 @@ Given('I navigate to the Ryanair website', async () => {
 })
 
 When(
-    'I search for a flight from {string} to {string} on {string} for 2 Adultos',
+    'I search for a flight from {string} to {string} on {string} for 2 Adultos', { timeout: 4 * 5000 },
     async (departure, destination, startDate) => {
         await homePage.acceptCookies()
         await homePage.selectFlight(departure, destination)
         await homePage.selectDate(startDate)
-       // await homePage.selectPassengers()
+        await homePage.selectTheFlight()
 })
 
 Then('a login popup shows up before payment', async () => {
