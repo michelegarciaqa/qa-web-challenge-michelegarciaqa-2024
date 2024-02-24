@@ -17,7 +17,7 @@ BeforeAll(async () => {
 })
 
 AfterAll(async () => {
-    //await driver.quit()
+    await driver.quit()
 })
 
 Given('I navigate to the Ryanair website', async () => {
@@ -37,5 +37,5 @@ When(
     })
 
 Then('a login popup shows up before payment', async () => {
-    //await homePage.validateLoginPopup()
+    await homePage.validateLoginPopup()
 })

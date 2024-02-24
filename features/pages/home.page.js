@@ -35,7 +35,6 @@ export class HomePage {
         this.noFastTrackButton =  By.xpath(`//button[contains(@data-ref,"dismiss-cta")]`)
         this.smallBagSelector = By.xpath('//bags-product-selector//ry-radio-circle-button/label');
         this.bigBagSelector = By.xpath('//bags-checkin-bag-table-controls/div[2]/bags-table-row-cta/span') 
-        this.continueToDealsButton = By.xpath('//*[contains(text(), "Continue")]')
     }
 
     async open() {
@@ -117,6 +116,31 @@ export class HomePage {
         await this.driver.findElement(this.noFastTrackButton).click()
         await this.driver.findElement(this.smallBagSelector).click();
         await this.driver.findElement(this.bigBagSelector).click();
-        await this.driver.findElement(this.continueToDealsButton).click();
+        await this.driver.findElement(this.continueButton).click();
+        await this.driver.findElement(this.continueButton).click();
+        await this.driver.findElement(this.continueButton).click();
+    }
+
+    async validateLoginPopup() {
+        await this.driver.wait(until.elementLocated(this.loginPopup), 10000);
+        // Get the element
+        const element = await this.driver.findElement(this.loginPopup);
+
+        // Get the text of the element
+        const actualText = await element.getText();
+
+        // Expected text
+        const expectedText = "Log in latersdsa";
+
+        // Log the actual and expected text
+        console.log("Actual text:", actualText);
+        console.log("Expected text:", expectedText);
+
+        // Compare the actual text with the expected text
+        if (actualText === expectedText) {
+            console.log("The login popup with the expected text appeared.");
+        } else {
+            console.log("The login popup with the expected text did not appear.");
+        }
     }
 }
