@@ -10,11 +10,8 @@ export class HomePage {
         this.searchButton = By.css('[data-ref="flight-search-widget__cta"]')
         this.acceptCookiesBtnSelector = By.css('[data-ref="cookie.accept-all"]')
         this.oneWaySelector = By.xpath('//*[contains(text(), "One way")]')
-        //the way so I can choose a date
-        this.chooseDaySelector = By.xpath('//*[contains(text(), "Choose date")]',
-        )
-        this.datesFromSelector = By.css('[data-ref="input-button__display-value"]',
-        )
+        this.chooseDaySelector = By.xpath('//*[contains(text(), "Choose date")]',)
+        this.datesFromSelector = By.css('[data-ref="input-button__display-value"]',)
         this.datesToSelector = By.css('[uniqueid="dates-to"]')
         this.dateSelector = (date) => By.css(`[data-id="${date}"]`)
         this.adultSelector = By.css('aria-label="1Adults+1"')
@@ -32,9 +29,10 @@ export class HomePage {
         this.lastNameChild = By.id('form.passengers.CHD-0.surname')
         this.okayGotItButton = By.xpath('//*[contains(text(), " Okay, got it.")]')
         this.recommendedButton = By.xpath(`//button[contains(text(),"Add recommended seats")]`)
-        this.noFastTrackButton =  By.xpath(`//button[contains(@data-ref,"dismiss-cta")]`)
+        this.noFastTrackButton = By.xpath(`//button[contains(@data-ref,"dismiss-cta")]`)
         this.smallBagSelector = By.xpath('//bags-product-selector//ry-radio-circle-button/label');
-        this.bigBagSelector = By.xpath('//bags-checkin-bag-table-controls/div[2]/bags-table-row-cta/span') 
+        this.bigBagSelector = By.xpath('//bags-checkin-bag-table-controls/div[2]/bags-table-row-cta/span')
+        this.continueTeste = By.xpath('/html/body/bags-root/bags-booking-container/div/main/div/section[4]/bags-continue-flow-container/bags-continue-flow/button')
     }
 
     async open() {
@@ -68,19 +66,20 @@ export class HomePage {
         )
 
         await this.driver.findElement(this.dateSelector(startDate)).click()
+
         //in case i wanna put return dates
         //await this.driver.findElement(this.datesToSelector).click()
         //await this.driver.findElement(this.dateSelector(endDate)).click()
 
         const increaseChildrenButtonLocator = By.xpath(
             "//ry-counter-button[contains(@aria-label, 'Children+1')]/parent::div"
-          );
-          const increaseChildrenButton = await this.driver.wait(
+        );
+        const increaseChildrenButton = await this.driver.wait(
             until.elementLocated(increaseChildrenButtonLocator),
             10000
-          );
-          await this.driver.wait(until.elementIsVisible(increaseChildrenButton));
-          await increaseChildrenButton.click();
+        );
+        await this.driver.wait(until.elementIsVisible(increaseChildrenButton));
+        await increaseChildrenButton.click();
 
         await this.driver.wait(until.elementsLocated(this.doneButton), 5000)
         await this.driver.findElement(this.doneButton).click()
@@ -111,7 +110,7 @@ export class HomePage {
         await this.driver.findElement(this.continueButton).click()
         await this.driver.wait(until.elementLocated(this.okayGotItButton), 5000);
         await this.driver.findElement(this.okayGotItButton).click()
-        await this.driver.wait(until.elementLocated(this.recommendedButton), 50000);
+        await this.driver.wait(until.elementLocated(this.recommendedButton), 100000);
         await this.driver.findElement(this.recommendedButton).click()
         await this.driver.findElement(this.noFastTrackButton).click()
         await this.driver.findElement(this.smallBagSelector).click();
@@ -121,21 +120,19 @@ export class HomePage {
         await this.driver.findElement(this.continueButton).click();
     }
 
+
+
     async validateLoginPopup() {
         await this.driver.wait(until.elementLocated(this.loginPopup), 10000);
         // Get the element
         const element = await this.driver.findElement(this.loginPopup);
-
         // Get the text of the element
         const actualText = await element.getText();
-
         // Expected text
         const expectedText = "Log in latersdsa";
-
         // Log the actual and expected text
         console.log("Actual text:", actualText);
         console.log("Expected text:", expectedText);
-
         // Compare the actual text with the expected text
         if (actualText === expectedText) {
             console.log("The login popup with the expected text appeared.");

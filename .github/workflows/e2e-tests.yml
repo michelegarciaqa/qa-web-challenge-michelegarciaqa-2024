@@ -33,16 +33,3 @@ jobs:
                   timeout_minutes: 20
                   max_attempts: 2
                   command: npm test
-
-            - name: Generate report
-              uses: actions/upload-artifact@v4
-              with:
-                  name: Myreport.html
-                  path: '**/cucumber-report.html'
-
-            - name: Deploy report to Github Pages
-              uses: peaceiris/actions-gh-pages@v2
-              env:
-                  PERSONAL_TOKEN: ${{ secrets.TOKEN_ACTIONS }}
-                  PUBLISH_BRANCH: gh-pages
-                  PUBLISH_DIR: ./reports

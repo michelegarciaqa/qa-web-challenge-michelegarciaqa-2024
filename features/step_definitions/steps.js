@@ -21,13 +21,12 @@ AfterAll(async () => {
 })
 
 Given('I navigate to the Ryanair website', async () => {
-    // await driver.get('https://www.ryanair.com/ie/en')
     homePage = new HomePage(driver)
     await homePage.open();
 })
 
 When(
-    'I search for a flight from {string} to {string} on {string} for 2 Adultos', { timeout: 8 * 5000 },
+    'I search for a flight from {string} to {string} on {string} for 1 Adults, 1 Child', { timeout: 9 * 5000 },
     async (departure, destination, startDate) => {
         await homePage.acceptCookies()
         await homePage.selectFlight(departure, destination)
