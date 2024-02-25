@@ -26,14 +26,22 @@ Given('I navigate to the Ryanair website', async () => {
 })
 
 When(
-    'I search for a flight from {string} to {string} on {string} for 1 Adults, 1 Child', { timeout: 9 * 5000 },
+    'I search for a flight from {string} to {string} on {string} for 2 Adults, 1 Child', { timeout: 16 * 5000 },
     async (departure, destination, startDate) => {
         await homePage.acceptCookies()
-        await homePage.selectFlight(departure, destination)
+        await homePage.selectDestination(departure, destination)
         await homePage.selectDate(startDate)
         await homePage.selectTheFlight()
-        await homePage.passengers()
+        await homePage.passengersInfo()
     })
+
+When('I select seats for all passengers', { timeout: 2 * 100000 }, async () => {
+    await homePage.selectSeats();
+})
+
+When('I add a 20kg bag for each passenger', async () => {
+    await homePage.selectBags();
+})
 
 Then('a login popup shows up before payment', async () => {
     await homePage.validateLoginPopup()

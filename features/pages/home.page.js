@@ -20,10 +20,14 @@ export class HomePage {
         this.basicFareSelector = By.xpath('//fare-table-new-layout-container//thead/tr/th[2]/div')
         this.basicFareButtonLocator = By.xpath("//button[@data-e2e='value']")
         this.logInLaterButton = By.xpath('//span[contains(text(), "Log in later")]')
-        this.tittleDropDown = By.xpath('//pax-passenger-container[1]//ry-dropdown/div[2]/button/icon/span')
-        this.tittleSelector = By.xpath('//*[contains(text(), "Ms")]')
-        this.firstNameAdult = By.id('form.passengers.ADT-0.name')
-        this.lastNameAdult = By.id('form.passengers.ADT-0.surname')
+        this.tittleDropDownAdult1 = By.xpath('//pax-passenger-container[1]//ry-dropdown/div[2]/button/icon/span')
+        this.tittleDropDownAdult2 = By.xpath('//pax-passenger-container[2]//ry-dropdown/div[2]/button/icon/span')
+        this.tittleSelectorAdult1 = By.xpath('//*[contains(text(), "Ms")]')
+        this.tittleSelectorAdult2 = By.xpath('//*[contains(text(), "Mr")]')
+        this.firstNameAdult1 = By.id('form.passengers.ADT-0.name')
+        this.lastNameAdult1 = By.id('form.passengers.ADT-0.surname')
+        this.firstNameAdult2 = By.id('form.passengers.ADT-1.name')
+        this.lastNameAdult2 = By.id('form.passengers.ADT-1.surname')
         this.continueButton = By.xpath('//*[contains(text(), "Continue")]')
         this.firstNameChild = By.id('form.passengers.CHD-0.name')
         this.lastNameChild = By.id('form.passengers.CHD-0.surname')
@@ -32,7 +36,6 @@ export class HomePage {
         this.noFastTrackButton = By.xpath(`//button[contains(@data-ref,"dismiss-cta")]`)
         this.smallBagSelector = By.xpath('//bags-product-selector//ry-radio-circle-button/label');
         this.bigBagSelector = By.xpath('//bags-checkin-bag-table-controls/div[2]/bags-table-row-cta/span')
-        this.continueTeste = By.xpath('/html/body/bags-root/bags-booking-container/div/main/div/section[4]/bags-continue-flow-container/bags-continue-flow/button')
     }
 
     async open() {
@@ -46,7 +49,7 @@ export class HomePage {
         await acceptCookiesBtn.click()
     }
 
-    async selectFlight(departure, destination) {
+    async selectDestination(departure, destination) {
         await this.driver.findElement(this.oneWaySelector).click()
 
         await this.driver.findElement(this.destinationAirportSelector).click()
@@ -59,9 +62,8 @@ export class HomePage {
 
     async selectDate(startDate, endDate) {
         await this.driver.findElement(this.chooseDaySelector).click()
-
         await this.driver.wait(
-            until.elementsLocated(this.dateSelector(startDate)),
+            until.elementLocated(this.dateSelector(startDate)),
             5000,
         )
 
@@ -71,6 +73,16 @@ export class HomePage {
         //await this.driver.findElement(this.datesToSelector).click()
         //await this.driver.findElement(this.dateSelector(endDate)).click()
 
+        const increaseAdultButtonLocator = By.xpath(
+            "//ry-counter-button[contains(@aria-label, 'Adults+1')]/parent::div"
+        );
+        const increaseAdultButton = await this.driver.wait(
+            until.elementLocated(increaseAdultButtonLocator),
+            10000
+        );
+        await this.driver.wait(until.elementIsVisible(increaseAdultButton))
+        await increaseAdultButton.click();
+
         const increaseChildrenButtonLocator = By.xpath(
             "//ry-counter-button[contains(@aria-label, 'Children+1')]/parent::div"
         );
@@ -78,7 +90,7 @@ export class HomePage {
             until.elementLocated(increaseChildrenButtonLocator),
             10000
         );
-        await this.driver.wait(until.elementIsVisible(increaseChildrenButton));
+        await this.driver.wait(until.elementIsVisible(increaseChildrenButton))
         await increaseChildrenButton.click();
 
         await this.driver.wait(until.elementsLocated(this.doneButton), 5000)
@@ -89,55 +101,66 @@ export class HomePage {
     async selectTheFlight() {
         await this.driver.findElement(this.selectButton).click();
         // Wait for the element to be present 
-        await this.driver.wait(until.elementLocated(this.basicFareSelector), 10000);
+        await this.driver.wait(until.elementLocated(this.basicFareSelector), 10000)
         // Scroll the element into view
-        const element = await this.driver.findElement(this.basicFareSelector);
-        await this.driver.executeScript("arguments[0].scrollIntoView(true);", element);
+        const element = await this.driver.findElement(this.basicFareSelector)
+        await this.driver.executeScript("arguments[0].scrollIntoView(true);", element)
         // Click on the element using JavaScript
         await this.driver.executeScript("arguments[0].click();", element);
-        await this.driver.wait(until.elementLocated(this.basicFareButtonLocator), 10000);
+        await this.driver.wait(until.elementLocated(this.basicFareButtonLocator), 10000)
         await this.driver.findElement(this.basicFareButtonLocator).click()
         await this.driver.findElement(this.logInLaterButton).click()
     }
 
-    async passengers() {
-        await this.driver.findElement(this.tittleDropDown).click()
-        await this.driver.findElement(this.tittleSelector).click()
-        await this.driver.findElement(this.firstNameAdult).sendKeys('Name')
-        await this.driver.findElement(this.lastNameAdult).sendKeys('Surname')
+    async passengersInfo() {
+        await this.driver.findElement(this.tittleDropDownAdult1).click()
+        await this.driver.findElement(this.tittleSelectorAdult1).click()
+        await this.driver.findElement(this.firstNameAdult1).sendKeys('Nameone')
+        await this.driver.findElement(this.lastNameAdult1).sendKeys('Surnameone')
+        await this.driver.findElement(this.tittleDropDownAdult2).click()
+        await this.driver.findElement(this.tittleSelectorAdult2).click()
+        await this.driver.findElement(this.firstNameAdult2).sendKeys('Nametwo')
+        await this.driver.findElement(this.lastNameAdult2).sendKeys('Surnametwo')
         await this.driver.findElement(this.firstNameChild).sendKeys('Name Child')
         await this.driver.findElement(this.lastNameChild).sendKeys('Surname Child')
         await this.driver.findElement(this.continueButton).click()
-        await this.driver.wait(until.elementLocated(this.okayGotItButton), 5000);
-        await this.driver.findElement(this.okayGotItButton).click()
-        await this.driver.wait(until.elementLocated(this.recommendedButton), 100000);
-        await this.driver.findElement(this.recommendedButton).click()
-        await this.driver.findElement(this.noFastTrackButton).click()
-        await this.driver.findElement(this.smallBagSelector).click();
-        await this.driver.findElement(this.bigBagSelector).click();
-        await this.driver.findElement(this.continueButton).click();
-        await this.driver.findElement(this.continueButton).click();
-        await this.driver.findElement(this.continueButton).click();
+
     }
 
+    async selectSeats() {
+        const okayGotItButton = await this.driver.wait(until.elementLocated(this.okayGotItButton), 10000)
+        await this.driver.wait(until.elementIsVisible(okayGotItButton), 10000);
+        await okayGotItButton.click();
+        const button = await this.driver.wait(until.elementLocated(this.recommendedButton), 10000)
+        await this.driver.executeScript("arguments[0].scrollIntoView()", button)
+        await button.click();
+        await this.driver.findElement(this.noFastTrackButton).click()
+    }
 
+    async selectBags() {
+        await this.driver.findElement(this.smallBagSelector).click()
+        await this.driver.findElement(this.bigBagSelector).click() 
+        await this.driver.findElement(this.continueButton).click() 
+        await this.driver.findElement(this.continueButton).click() 
+        await this.driver.findElement(this.continueButton).click() 
+ }
 
     async validateLoginPopup() {
-        await this.driver.wait(until.elementLocated(this.loginPopup), 10000);
+        await this.driver.wait(until.elementLocated(this.loginPopup), 10000)
         // Get the element
-        const element = await this.driver.findElement(this.loginPopup);
+        const element = await this.driver.findElement(this.loginPopup)
         // Get the text of the element
         const actualText = await element.getText();
         // Expected text
-        const expectedText = "Log in latersdsa";
+        const expectedText = "Make it simple with myRyanair"
         // Log the actual and expected text
-        console.log("Actual text:", actualText);
-        console.log("Expected text:", expectedText);
+        console.log("Actual text:", actualText)
+        console.log("Expected text:", expectedText)
         // Compare the actual text with the expected text
         if (actualText === expectedText) {
-            console.log("The login popup with the expected text appeared.");
+            console.log("The login popup with the expected text appeared.")
         } else {
-            console.log("The login popup with the expected text did not appear.");
+            console.log("The login popup with the expected text did not appear.")
         }
     }
 }
