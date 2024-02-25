@@ -7,7 +7,7 @@ let driver
 let homePage
 
 BeforeAll(async () => {
-    const options = new chrome.Options().addArguments()
+    const options = new chrome.Options().addArguments('--no-sandbox')
     driver = new Builder()
         .forBrowser('chrome')
         .setChromeOptions(options)
@@ -17,7 +17,7 @@ BeforeAll(async () => {
 })
 
 AfterAll(async () => {
-    await driver.quit()
+    // await driver.quit()
 })
 
 Given('I navigate to the Ryanair website', async () => {
@@ -32,7 +32,8 @@ When(
         await homePage.selectDestination(departure, destination)
         await homePage.selectDate(startDate)
         await homePage.selectTheFlight()
-        await homePage.passengersInfo()
+        await homePage.passengersInfo(
+            'Mr', 'Nameone', 'Surnameone', 'Ms', 'Nametwo', 'Surnametwo', 'Name Child', 'Surname Child')
     })
 
 When('I select seats for all passengers', { timeout: 2 * 100000 }, async () => {

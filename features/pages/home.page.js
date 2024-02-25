@@ -112,20 +112,20 @@ export class HomePage {
         await this.driver.findElement(this.logInLaterButton).click()
     }
 
-    async passengersInfo() {
+    async passengersInfo(adult1Title, adult1FirstName, adult1LastName, adult2Title, adult2FirstName, adult2LastName, childFirstName, childLastName) {
         await this.driver.findElement(this.tittleDropDownAdult1).click()
         await this.driver.findElement(this.tittleSelectorAdult1).click()
-        await this.driver.findElement(this.firstNameAdult1).sendKeys('Nameone')
-        await this.driver.findElement(this.lastNameAdult1).sendKeys('Surnameone')
+        await this.driver.findElement(this.firstNameAdult1).sendKeys(adult1FirstName)
+        await this.driver.findElement(this.lastNameAdult1).sendKeys(adult1LastName)
         await this.driver.findElement(this.tittleDropDownAdult2).click()
         await this.driver.findElement(this.tittleSelectorAdult2).click()
-        await this.driver.findElement(this.firstNameAdult2).sendKeys('Nametwo')
-        await this.driver.findElement(this.lastNameAdult2).sendKeys('Surnametwo')
-        await this.driver.findElement(this.firstNameChild).sendKeys('Name Child')
-        await this.driver.findElement(this.lastNameChild).sendKeys('Surname Child')
+        await this.driver.findElement(this.firstNameAdult2).sendKeys(adult2FirstName)
+        await this.driver.findElement(this.lastNameAdult2).sendKeys(adult2LastName)
+        await this.driver.findElement(this.firstNameChild).sendKeys(childFirstName)
+        await this.driver.findElement(this.lastNameChild).sendKeys(childLastName)
         await this.driver.findElement(this.continueButton).click()
-
     }
+    
 
     async selectSeats() {
         const okayGotItButton = await this.driver.wait(until.elementLocated(this.okayGotItButton), 10000)
@@ -140,9 +140,15 @@ export class HomePage {
     async selectBags() {
         await this.driver.findElement(this.smallBagSelector).click()
         await this.driver.findElement(this.bigBagSelector).click() 
-        await this.driver.findElement(this.continueButton).click() 
-        await this.driver.findElement(this.continueButton).click() 
-        await this.driver.findElement(this.continueButton).click() 
+        const continueWithBagsButtonLocator = By.xpath(
+            `//button[@data-ref="bags-continue-button"]`
+          );
+          const continueWithBagsButton = await this.driver.wait(
+            until.elementLocated(continueWithBagsButtonLocator),
+            1000000
+          );
+          await this.driver.wait(until.elementIsVisible(continueWithBagsButton));
+          await continueWithBagsButton.click();
  }
 
     async validateLoginPopup() {
