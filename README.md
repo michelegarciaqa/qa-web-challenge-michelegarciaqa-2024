@@ -26,5 +26,19 @@ To use the automated testing functionality provided by this project, follow thes
 - `passengers()`: Provides passenger information and continues with the booking process.
 - `validateLoginPopup()`: Verifies the appearance of a login popup with expected text.
 
+### Explanation of Code Section
 
+The following code snippet is responsible for ensuring that the "Continue" button is clickable only after the basket has been updated with a new value. This was necessary because simply using a wait mechanism wasn't effective due to certain timing issues.
 
+```javascript
+let initialElement = await this.driver.findElement(this.basket);
+let initialValue = await initialElement.getText();
+
+// Wait until the element changes
+await this.driver.wait(async () => {
+    let updatedElement = await this.driver.findElement(this.basket);
+    let updatedValue = await updatedElement.getText();
+    
+    // Check if the current value is different from the initial value
+    return updatedValue !== initialValue;
+}, 10000);
