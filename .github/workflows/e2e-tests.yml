@@ -32,4 +32,4 @@ jobs:
               with:
                   timeout_minutes: 20
                   max_attempts: 2
-                  command: npm test
+                  command: npm run test
