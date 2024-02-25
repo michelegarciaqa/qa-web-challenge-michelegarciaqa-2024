@@ -34,8 +34,12 @@ export class HomePage {
         this.okayGotItButton = By.xpath('//*[contains(text(), " Okay, got it.")]')
         this.recommendedButton = By.xpath(`//button[contains(text(),"Add recommended seats")]`)
         this.noFastTrackButton = By.xpath(`//button[contains(@data-ref,"dismiss-cta")]`)
-        this.smallBagSelector = By.xpath('//bags-product-selector//ry-radio-circle-button/label');
+        this.smallBagSelector = By.xpath('//bags-product-selector//ry-radio-circle-button/label')
         this.bigBagSelector = By.xpath('//bags-checkin-bag-table-controls/div[2]/bags-table-row-cta/span')
+        this.basket = By.xpath('//ry-basket-total-container//ry-price')
+        this.addForAll = By.xpath('//main//fast-track-card//button')
+        this.continueFastTrack = By.xpath('//div[contains(@class, "airport-and-flight-container")]//button')
+        this.loginPopup = By.xpath('//ry-auth-popup')
     }
 
     async open() {
@@ -112,7 +116,7 @@ export class HomePage {
         await this.driver.findElement(this.logInLaterButton).click()
     }
 
-    async passengersInfo(adult1Title, adult1FirstName, adult1LastName, adult2Title, adult2FirstName, adult2LastName, childFirstName, childLastName) {
+    async passengersInfo(adult1FirstName, adult1LastName, adult2FirstName, adult2LastName, childFirstName, childLastName) {
         await this.driver.findElement(this.tittleDropDownAdult1).click()
         await this.driver.findElement(this.tittleSelectorAdult1).click()
         await this.driver.findElement(this.firstNameAdult1).sendKeys(adult1FirstName)
@@ -125,11 +129,11 @@ export class HomePage {
         await this.driver.findElement(this.lastNameChild).sendKeys(childLastName)
         await this.driver.findElement(this.continueButton).click()
     }
-    
+
 
     async selectSeats() {
         const okayGotItButton = await this.driver.wait(until.elementLocated(this.okayGotItButton), 10000)
-        await this.driver.wait(until.elementIsVisible(okayGotItButton), 10000);
+        await this.driver.wait(until.elementIsVisible(okayGotItButton), 10000)
         await okayGotItButton.click();
         const button = await this.driver.wait(until.elementLocated(this.recommendedButton), 10000)
         await this.driver.executeScript("arguments[0].scrollIntoView()", button)
@@ -139,20 +143,26 @@ export class HomePage {
 
     async selectBags() {
         await this.driver.findElement(this.smallBagSelector).click()
-        await this.driver.findElement(this.bigBagSelector).click() 
-        const continueWithBagsButtonLocator = By.xpath(
-            `//button[@data-ref="bags-continue-button"]`
-          );
-          const continueWithBagsButton = await this.driver.wait(
-            until.elementLocated(continueWithBagsButtonLocator),
-            1000000
-          );
-          await this.driver.wait(until.elementIsVisible(continueWithBagsButton));
-          await continueWithBagsButton.click();
- }
+        await this.driver.findElement(this.bigBagSelector).click()
+        let initialElement = await this.driver.findElement(this.basket);
+        let initialValue = await initialElement.getText();
+        // wait until the element changes it
+        await this.driver.wait(async () => {
+            let updatedElement = await this.driver.findElement(this.basket);
+            let updatedValue = await updatedElement.getText();
+            //check if the current value is different from the initial value
+            return updatedValue !== initialValue;
+        }, 10000);
+        await this.driver.findElement(this.continueButton).click()
+        await this.driver.findElement(this.addForAll).click()
+        await this.driver.findElement(this.continueButton).click()
+        await this.driver.wait(until.elementLocated(this.continueButton), 50000)
+        await this.driver.findElement(this.continueButton).click()
+
+    }
 
     async validateLoginPopup() {
-        await this.driver.wait(until.elementLocated(this.loginPopup), 10000)
+        await this.driver.wait(until.elementLocated(this.loginPopup), 20000)
         // Get the element
         const element = await this.driver.findElement(this.loginPopup)
         // Get the text of the element
