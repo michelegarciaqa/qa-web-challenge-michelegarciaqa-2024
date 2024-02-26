@@ -73,7 +73,7 @@ export class HomePage {
 
         await this.driver.findElement(this.dateSelector(startDate)).click()
 
-        //in case i wanna put return dates
+        //in case I wanna put return dates
         //await this.driver.findElement(this.datesToSelector).click()
         //await this.driver.findElement(this.dateSelector(endDate)).click()
 
